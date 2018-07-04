@@ -94,7 +94,7 @@ open class SideMenuController: UIViewController {
             }
             
             load(contentViewController, on: contentContainerView)
-            contentContainerView.sendSubview(toBack: contentViewController.view)
+            contentContainerView.sendSubviewToBack(contentViewController.view)
             unload(oldValue)
             
             setNeedsStatusBarAppearanceUpdate()
@@ -177,7 +177,7 @@ open class SideMenuController: UIViewController {
         load(menuViewController, on: menuContainerView)
         
         if preferences.basic.position == .under {
-            view.bringSubview(toFront: contentContainerView)
+            view.bringSubviewToFront(contentContainerView)
         }
         
         // Forwarding status bar style/hidden status to content view controller
@@ -338,7 +338,7 @@ open class SideMenuController: UIViewController {
             overlay.backgroundColor = .black
             overlay.alpha = 0
         }
-        overlay.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+        overlay.autoresizingMask = [UIView.AutoresizingMask.flexibleHeight, UIView.AutoresizingMask.flexibleWidth]
         
         // UIKit can coordinate overlay's tap gesture and controller view's pan gesture correctly
         let tapToHideGesture = UITapGestureRecognizer()
@@ -452,7 +452,7 @@ open class SideMenuController: UIViewController {
     private func setUpNotifications() {
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(SideMenuController.appDidEnteredBackground),
-                                               name: .UIApplicationDidEnterBackground,
+                                               name: UIApplication.didEnterBackgroundNotification,
                                                object: nil)
     }
     
@@ -507,12 +507,12 @@ open class SideMenuController: UIViewController {
         return screenshot
     }
     
-    open override var childViewControllerForStatusBarStyle: UIViewController? {
+    open override var childForStatusBarStyle: UIViewController? {
         // Forward to the content view controller
         return contentViewController
     }
     
-    open override var childViewControllerForStatusBarHidden: UIViewController? {
+    open override var childForStatusBarHidden: UIViewController? {
         return contentViewController
     }
     
@@ -613,11 +613,11 @@ open class SideMenuController: UIViewController {
             return
         }
         
-        addChildViewController(viewController)
+        addChild(viewController)
         viewController.view.frame = view.bounds
-        viewController.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        viewController.view.autoresizingMask = [UIView.AutoresizingMask.flexibleWidth, UIView.AutoresizingMask.flexibleHeight]
         view.addSubview(viewController.view)
-        viewController.didMove(toParentViewController: self)
+        viewController.didMove(toParent: self)
     }
     
     private func unload(_ viewController: UIViewController?) {
@@ -625,9 +625,9 @@ open class SideMenuController: UIViewController {
             return
         }
         
-        viewController.willMove(toParentViewController: nil)
+        viewController.willMove(toParent: nil)
         viewController.view.removeFromSuperview()
-        viewController.removeFromParentViewController()
+        viewController.removeFromParent()
     }
     
     // MARK: Orientation
