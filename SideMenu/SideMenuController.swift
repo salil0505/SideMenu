@@ -18,7 +18,7 @@ import UIKit
 /// └── Content View Controller
 open class SideMenuController: UIViewController {
     /// User data to pass along with segues
-    var userData: Any? = nil
+    public var userData: Any? = nil
 
     /// Configure this property to change the behavior of SideMenuController;
     public static var preferences = Preferences()
